@@ -1,5 +1,2 @@
 # mimicReadmission
-
-To do something
-
-Also do something
+Trying to undersant what is going on 
