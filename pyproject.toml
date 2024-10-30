@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "mimicreadmission"
+version = "0.1.0"
+description = ""
+authors = ["RmsCarvalho <rmscarvalho@fc.ul.pt>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+
+
+[tool.poetry.group.prebuild.dependencies]
+flake8 = "^7.1.1"
+isort = "^5.13.2"
+mypy = "^1.13.0"
+pytest = "^8.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
