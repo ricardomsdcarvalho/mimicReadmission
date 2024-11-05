@@ -7,6 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
+rdflib = "^7.1.1"
+networkx = "^3.4.2"
+matplotlib = "^3.9.2"
+scikit-learn = "^1.5.2"
 
 
 [tool.poetry.group.prebuild.dependencies]
