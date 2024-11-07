@@ -1,14 +1,12 @@
-import numpy
-import os
 from operator import itemgetter
+
 import rdflib
 from rdflib.namespace import RDF, OWL, RDFS
 from rdflib import URIRef
-import json
+
 from pyrdf2vec.graphs import kg
 from pyrdf2vec.rdf2vec import RDF2VecTransformer
 from pyrdf2vec.embedders import Word2Vec
-
 from pyrdf2vec.samplers import UniformSampler, PredFreqSampler
 from pyrdf2vec.walkers import WeisfeilerLehmanWalker
 
@@ -29,8 +27,8 @@ def construct_kg(ontologySet,annotationSet,annotationType):
         for loc in range(len(ontologySet)):
             kg.parse(ontologySet[loc], format='xml')
 
-            fineAnnotations = open(annotationSet[loc], 'r')
-            for annot in fineAnnotations.readlines()[:]:
+            fileAnnotations = open(annotationSet[loc], 'r')
+            for annot in fileAnnotations.readlines()[:]:
                 annot = annot.lstrip()
 
                 #Get Head and Tail Entities
@@ -40,14 +38,16 @@ def construct_kg(ontologySet,annotationSet,annotationType):
                 ents.update((ent.strip() for ent in annotations.split(',')))
 
                 for urlAnnot in annotations.split(','):
-                    kg.add((URIRef(headEnt), URIRef(f'http://purl.obolibrary.org/obo/has{annotationType[loc]}'),
+                    kg.add((URIRef(headEnt), URIRef(f'http://purl.obolibrary.org/obo/{annotationType[loc]}'),
                             URIRef(urlAnnot.strip())))
-
-            kg.add(URIRef('http://purl.obolibrary.org/obo/hasAnnotation'), RDF.type, OWL.ObjectProperty)
+            
+            fileAnnotations.close()
+            kg.add(URIRef(f'http://purl.obolibrary.org/obo/{annotationType[loc]}'), RDF.type, OWL.ObjectProperty)
 
     except AssertionError as error:
-        print(f"Error: {error} Because the number of ontologies, annotations and annotation types must be the same")
+        print(f"Error: {error} Because the number of ontologies, annotations must be the same")
 
-    
+    #kg.serialize(destination='mimicreadmission/rdf2vec/outFiles/myKG.xml')
+
     print('KG created')
     return kg, list(ents)
