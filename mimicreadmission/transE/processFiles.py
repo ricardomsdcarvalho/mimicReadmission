@@ -26,7 +26,6 @@ for filename in filenames:
     relationType = f'has{filename[11:-4]}'  # Get relation type from filename
     allRelations.add(relationType)
 
-    
     # Add Entity1 and Entity2 to the entities set
     allEntities.update(data["Entity1"].unique())
     allEntities.update(data["Entity2"].unique())
@@ -48,16 +47,22 @@ with open("mimicreadmission/transE/outFiles/relation2id.txt", "w") as f:
         f.write(f"{idx}\t{relation}\n")
 
 # Generate the train2id file
+# Open the output file to save triples
 with open("mimicreadmission/transE/outFiles/train2id.txt", "w") as f:
-    for data in tqdm(allData, desc="Processing DataFrames"):
+    # Iterate over each DataFrame in allData
+    for data_index, data in enumerate(tqdm(allData, desc="Processing DataFrames")):
+        # Check the DataFrame's data types (for debugging)
+        print(data.dtypes)
+        
+        # Generate the relation type from the filename
+        relationType = f'has{filenames[data_index][11:-4]}'
+        relationid = relation2idMapping[relationType]
+
+        # Iterate over each row in the DataFrame
         for index, row in tqdm(data.iterrows(), total=len(data), desc="Processing Rows", leave=False):
             # Map Entity1 and Entity2 to their corresponding IDs
             entity1id = entity2idMapping.get(row["Entity1"])
             entity2id = entity2idMapping.get(row["Entity2"])
             
-            # Extract relation from the filename (use the relation type defined earlier)
-            relationType = f'has{filenames[allData.index(data)][11:-4]}'
-            relationid = relation2idMapping[relationType]
-            
             # Write the triple to the train2id file
-            f.write(f"{entity1id}\t{entity2id}\t{relationid}\n")
+            f.write(f"{entity1id}\t{relationid}\t{entity2id}\n")
