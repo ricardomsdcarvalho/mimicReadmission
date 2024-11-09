@@ -52,3 +52,4 @@ dmypy.json
 
 # Datasets
 .csv
+.txt

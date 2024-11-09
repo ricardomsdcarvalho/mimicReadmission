@@ -6,11 +6,15 @@ authors = ["RmsCarvalho <rmscarvalho@fc.ul.pt>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.13"
+python = ">=3.10,<3.12"
 rdflib = "^7.1.1"
 networkx = "^3.4.2"
 matplotlib = "^3.9.2"
 scikit-learn = "^1.5.2"
+tensorflow-io-gcs-filesystem = "0.34.0"
+tensorflow = "^2.18.0"
+pandas = "^2.2.3"
+tqdm = "^4.67.0"
 
 
 [tool.poetry.group.prebuild.dependencies]

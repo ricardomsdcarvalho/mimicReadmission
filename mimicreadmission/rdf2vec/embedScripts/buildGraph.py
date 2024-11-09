@@ -51,3 +51,5 @@ def construct_kg(ontologySet,annotationSet,annotationType):
 
     print('KG created')
     return kg, list(ents)
+
+
