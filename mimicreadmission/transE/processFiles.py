@@ -1,10 +1,23 @@
+#############################################################
+# This script creates the needed files for the TransE model #
+# However it does not take in to account the graph scructure#
+# And dinamics directly. For that we created the script     #
+# preProcess.py                                             #
+#############################################################
+
+
+
+import os
 import pandas as pd
 from tqdm import tqdm
 
 # List of filenames for each relation type
 filenames = [
     "AnnotationsFinalDiagnosis.csv",
-    "AnnotationsInitialDiagnosis.csv"
+    "AnnotationsInitialDiagnosis.csv",
+    "AnnotationsLabEvents.csv",
+    "AnnotationsPrescriptions.csv",
+    "AnnotationsProcedures.csv"
 ]
 
 # Initialize lists to hold the data for all files
@@ -36,19 +49,21 @@ entity2idMapping = {entity: idx for idx, entity in enumerate(sorted(allEntities)
 # Create the relation2id mapping (Relation -> ID)
 relation2idMapping = {relation: idx for idx, relation in enumerate(sorted(allRelations))}
 
+os.makedirs("/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/transE/files", exist_ok=True)
+
 # Write the entity2id file
-with open("mimicreadmission/transE/outFiles/entity2id.txt", "w") as f:
+with open("/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/transE/files/entity2id.txt", "w") as f:
     for entity, idx in entity2idMapping.items():
         f.write(f"{idx}\t{entity}\n")
 
 # Write the relation2id file
-with open("mimicreadmission/transE/outFiles/relation2id.txt", "w") as f:
+with open("/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/transE/files/relation2id.txt", "w") as f:
     for relation, idx in relation2idMapping.items():
         f.write(f"{idx}\t{relation}\n")
 
 # Generate the train2id file
 # Open the output file to save triples
-with open("mimicreadmission/transE/outFiles/train2id.txt", "w") as f:
+with open("/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/transE/files/train2id.txt", "w") as f:
     # Iterate over each DataFrame in allData
     for data_index, data in enumerate(tqdm(allData, desc="Processing DataFrames")):
         # Check the DataFrame's data types (for debugging)

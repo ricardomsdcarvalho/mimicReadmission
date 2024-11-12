@@ -1,6 +1,10 @@
 {
     "python.analysis.extraPaths": [
         "./mimicreadmission/rdf2vec",
-        "./mimicreadmission/rdf2vec/embedScripts"
+        "./mimicreadmission/rdf2vec/embedScripts",
+        "./mimicreadmission/OpenKE/openke",
+        "./mimicreadmission/OpenKE",
+        "./mimicreadmission",
+        "./mimicreadmission/transE"
     ]
 }

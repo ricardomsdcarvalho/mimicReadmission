@@ -6,7 +6,7 @@ from rdflib.namespace import RDF, OWL, RDFS
 from rdflib import URIRef
 import json
 
-import buildGraph as BG
+import mimicreadmission.buildGraph as BG
 from pyrdf2vec.graphs import kg
 from pyrdf2vec.rdf2vec import RDF2VecTransformer
 from pyrdf2vec.embedders import Word2Vec
