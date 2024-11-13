@@ -5,6 +5,8 @@
         "./mimicreadmission/OpenKE/openke",
         "./mimicreadmission/OpenKE",
         "./mimicreadmission",
-        "./mimicreadmission/transE"
+        "./mimicreadmission/transE",
+        "./mimicreadmission/resources",
+        "./mimicreadmission/resources/OpenKE"
     ]
 }

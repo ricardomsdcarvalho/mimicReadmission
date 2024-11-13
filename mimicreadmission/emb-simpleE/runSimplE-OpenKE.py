@@ -1,6 +1,6 @@
-from openke.config import Trainer, Tester
-from openke.module.model import TransE
-from openke.module.loss import MarginLoss
+from openke.config import Trainer
+from openke.module.model import SimpleE
+from openke.module.loss import SoftplusLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader
 import numpy as np
@@ -16,20 +16,20 @@ def main(inpath = 'mimicreadmission/Data/entityRelation'):
         f'{inpath}train2id.txt'
     ]
 
-    # Check if all expected files exist
+    # Use assert to check if all expected files exist
     assert all(os.path.exists(file) for file in output_files), (
-        "Required output files are missing. Please run the script mimicreadmission/preProcess.py \
-            and ensure the following files are in the output directory:\n" +
-        "\n".join(output_files)
+       "Required output files are missing. Please run the script mimicreadmission/preProcess.py \
+        and ensure the following files are in the output directory:\n" +
+       "\n".join(output_files)
     )
 
     print("All output files are present. Proceeding with the next steps.")
 
     # Load training data
     train_dataloader = TrainDataLoader(
-        in_path = inpath,  
+        in_path = inpath, 
         nbatches = 100,       # Number of batches
-        threads = 8,          # Number of threads for multi-threaded data loading
+        threads = 8,          # Number of threads
         sampling_mode = "normal",
         bern_flag = 0,
         filter_flag = 1,
@@ -37,38 +37,40 @@ def main(inpath = 'mimicreadmission/Data/entityRelation'):
         neg_rel = 0
     )
 
-    # Set up TransE model
-    transe = TransE(
+    # Set up SimpleE model
+    simplee = SimpleE(
         ent_tot = train_dataloader.get_ent_tot(),
         rel_tot = train_dataloader.get_rel_tot(),
-        dim = 300,             # Embedding dimension
-        p_norm = 1,
-        norm_flag = True
+        dim = 300             # Embedding dimension
     )
-   
-    # Define loss function
+
+    # Define loss function for SimpleE
     model = NegativeSampling(
-        model = transe,
-        loss = MarginLoss(margin = 5.0),
+        model = simplee,
+        loss = SoftplusLoss(),
         batch_size = train_dataloader.get_batch_size()
     )
 
     # Train the model
-    trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 1000, alpha = 0.5, use_gpu = True)
+    trainer = Trainer(model = model, 
+                      data_loader = train_dataloader, 
+                      train_times = 1000, 
+                      alpha = 0.5, 
+                      use_gpu = True)
+    
     trainer.run()
-    transe.save_checkpoint("./checkpoint/transe.ckpt")
+    simplee.save_checkpoint("./checkpoint/simplee.ckpt")
 
-    # Load trained TransE model and export embeddings
-    transe.load_checkpoint("./checkpoint/transe.ckpt")
+    #Load the trained simplee model and export the embeddings
+    simplee.load_checkpoint("./checkpoint/simplee.ckpt")
 
-    # Get entity embeddings
-    ent_embeddings = transe.ent_embeddings.weight.cpu().data.numpy()
-    rel_embeddings = transe.rel_embeddings.weight.cpu().data.numpy()
+    # Get the entity embeddings
+    ent_embeddings = simplee.ent_embeddings.weight.data.cpu().data.numpy()
+    rel_embeddings = simplee.rel_embeddings.weight.data.cpu().data.numpy()
 
     # Save entity embeddings
     np.savetxt('./output/entity_embeddings.txt', ent_embeddings, delimiter='\t')
     np.savetxt('./output/relation_embeddings.txt', rel_embeddings, delimiter='\t')
-
 
 if __name__ == '__main__':
     
