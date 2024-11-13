@@ -1,5 +1,6 @@
 import rdflib
 from rdflib import URIRef
+import buildGraph as BG
 
 def process_kg_for_transe(kg):
     entities = set()
@@ -15,7 +16,7 @@ def process_kg_for_transe(kg):
     
     return list(entities), list(relations), triples
 
-def save_mappings_and_triples(kg, output_path = 'mimicreadmission/transE/files/' ):
+def save_mappings_and_triples(kg, output_path = 'mimicreadmission/data/' ):
 
     entities, relations, triples = process_kg_for_transe(kg)
     # Create entity and relation dictionaries with unique IDs
@@ -39,3 +40,17 @@ def save_mappings_and_triples(kg, output_path = 'mimicreadmission/transE/files/'
         f.write(f"{len(triples)}\n")  # Number of triples
         for (head, rel, tail) in triples:
             f.write(f"{entity2id[head]}\t{entity2id[tail]}\t{relation2id[rel]}\n")
+
+if __name__ == '__main__':
+    # Load the knowledge graph
+    ontologySet = ['mimicreadmission/data/ontology.xml'
+                   ]
+    annotationSet = ['mimicreadmission/data/annotations.csv'
+                     ]
+    annotationType = ['hasAnnotation'
+                      ]
+    
+    kg, entities = BG.construct_kg(ontologySet, annotationSet, annotationType)
+    
+    # Save entity2id.txt, relation2id.txt, and train2id.txt
+    save_mappings_and_triples(kg)
