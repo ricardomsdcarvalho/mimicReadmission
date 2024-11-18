@@ -16,7 +16,7 @@ def process_kg_for_transe(kg):
     
     return list(entities), list(relations), triples
 
-def save_mappings_and_triples(kg, output_path = 'mimicreadmission/data/' ):
+def save_mappings_and_triples(kg, output_path = 'mimicreadmission/data/entityRelation' ):
 
     entities, relations, triples = process_kg_for_transe(kg)
     # Create entity and relation dictionaries with unique IDs
@@ -43,11 +43,23 @@ def save_mappings_and_triples(kg, output_path = 'mimicreadmission/data/' ):
 
 if __name__ == '__main__':
     # Load the knowledge graph
-    ontologySet = ['mimicreadmission/data/ontology.xml'
+    ontologySet = ['mimicreadmission/Data/ontologies/Thesaurus.owl',
+                   'mimicreadmission/Data/ontologies/LOINC.rdf',
+                   'mimicreadmission/Data/ontologies/dron.owl',
+                    'mimicreadmission/Data/ontologies/ICD9CM.ttl'
                    ]
-    annotationSet = ['mimicreadmission/data/annotations.csv'
-                     ]
-    annotationType = ['hasAnnotation'
+    annotationSet = ['mimicreadmission/data/annotations/AnnotationsInitialDiagnosis.csv',
+                    'mimicreadmission/data/annotations/AnnotationsLabEvents.csv',
+                    'mimicreadmission/data/annotations/AnnotationsPrescriptions.csv',
+                    'mimicreadmission/data/annotations/AnnotationsProcedures.csv',
+                    'mimicreadmission/data/annotations/AnnotationsFinalDiagnosis.csv'
+                    ]
+                    
+    annotationType = ['hasInitialDiagnosis',
+                    'hasLabEvent',
+                    'hasPrescription',
+                    'hasProcedure',
+                    'hasFinalDiagnosis'
                       ]
     
     kg, entities = BG.construct_kg(ontologySet, annotationSet, annotationType)
