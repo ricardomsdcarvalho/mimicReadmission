@@ -4,13 +4,6 @@ import rdflib
 from rdflib.namespace import RDF, OWL, RDFS
 from rdflib import URIRef
 
-from pyrdf2vec.graphs import kg
-from pyrdf2vec.rdf2vec import RDF2VecTransformer
-from pyrdf2vec.embedders import Word2Vec
-from pyrdf2vec.samplers import UniformSampler, PredFreqSampler
-from pyrdf2vec.walkers import WeisfeilerLehmanWalker
-
-
 
 # The format of the input files is allwaays: (id);[annoations]
 # as such we can always split by ; and than loop the list 
