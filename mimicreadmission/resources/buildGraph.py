@@ -38,7 +38,7 @@ def construct_kg(ontologySet,annotationSet,annotationType):
                     annot = annot.lstrip()
 
                     #Get Head and Tail Entities
-                    headInfo, annotations, time = annot.split(";")
+                    headInfo, annotations = annot.split(";")[:2]
                     headEnt = f"http://purl.obolibrary.org/obo/{headInfo.split(',')[0]}"
 
                     ents.update((ent.strip() for ent in annotations.split(",")))
@@ -62,7 +62,7 @@ def construct_kg(ontologySet,annotationSet,annotationType):
                         annot = annot.lstrip()
 
                         #Get Head and Tail Entities
-                        headInfo, annotations, time = annot.split(";")
+                        headInfo, annotations = annot.split(";")[:2]
                         headEnt = f"http://purl.obolibrary.org/obo/{headInfo.split(',')[0]}"
 
                         ents.update((ent.strip() for ent in annotations.split(",")))
