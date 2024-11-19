@@ -2,6 +2,9 @@ import rdflib
 from rdflib import URIRef
 import buildGraph as BG
 import tqdm
+import sys
+
+sys.path.append('mimicreadmission/data/ontologies')
 
 def process_kg_for_transe(kg):
     entities = set()

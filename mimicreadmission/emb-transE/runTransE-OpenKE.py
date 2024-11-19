@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/resources/OpenKE')
+
 from openke.config import Trainer
 from openke.module.model import TransE
 from openke.module.loss import MarginLoss
@@ -7,7 +11,7 @@ import numpy as np
 import os
 
 
-def main(inpath = 'mimicreadmission/Data/entityRelation'):
+def main(inpath = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/data/entityRelation/'):
     
     # Define the expected file paths in the output directory
     output_files = [
@@ -36,6 +40,7 @@ def main(inpath = 'mimicreadmission/Data/entityRelation'):
         neg_ent = 25,
         neg_rel = 0
     )
+
 
     # Set up TransE model
     transe = TransE(
@@ -70,8 +75,8 @@ def main(inpath = 'mimicreadmission/Data/entityRelation'):
     rel_embeddings = transe.rel_embeddings.weight.cpu().data.numpy()
 
     # Save entity embeddings
-    np.savetxt('./output/entity_embeddings.txt', ent_embeddings, delimiter='\t')
-    np.savetxt('./output/relation_embeddings.txt', rel_embeddings, delimiter='\t')
+    np.savetxt('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/entity_embeddings.txt', ent_embeddings, delimiter='\t')
+    np.savetxt('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/relation_embeddings.txt', rel_embeddings, delimiter='\t')
 
 
 if __name__ == '__main__':
