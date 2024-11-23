@@ -32,12 +32,12 @@ def main(inpath = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission
     # Load training data
     train_dataloader = TrainDataLoader(
         in_path = inpath,  
-        nbatches = 100,       # Number of batches
+        nbatches = 500,       # Number of batches
         threads = 8,          # Number of threads for multi-threaded data loading
         sampling_mode = "normal",
         bern_flag = 0,
         filter_flag = 1,
-        neg_ent = 25,
+        neg_ent = 10,
         neg_rel = 0
     )
 
@@ -46,7 +46,7 @@ def main(inpath = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission
     transe = TransE(
         ent_tot = train_dataloader.get_ent_tot(),
         rel_tot = train_dataloader.get_rel_tot(),
-        dim = 300,             # Embedding dimension
+        dim = 128,             # Embedding dimension
         p_norm = 1,
         norm_flag = True
     )

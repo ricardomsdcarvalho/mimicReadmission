@@ -1,5 +1,5 @@
 from operator import itemgetter
-
+import json
 import rdflib
 from rdflib.namespace import RDF, OWL, RDFS
 from rdflib import URIRef
@@ -79,5 +79,8 @@ def construct_kg(ontologySet,annotationSet,annotationType):
 
     #kg.serialize(destination="/home/ricciard0.dc/mimicReadmission/mimicreadmission/data/myKG.xml")
 
+    with open('targetEntities.json', 'w') as file:
+        json.dump(ents, file)
+        
     print("KG created")
-    return kg, list(ents)
+    return kg
