@@ -11,7 +11,7 @@ import numpy as np
 import os
 
 def extract_embeddings_for_specific_entities(entity_list, entity2id_path, ent_embeddings, 
-                                             output_path = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/'):
+                                             output_path = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/rdf2vec_128_embeddings.txt'):
     # Load entity2id mapping
     entity2id = {}
     with open(entity2id_path, 'r') as f:
@@ -95,22 +95,9 @@ def main(inpath = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission
     # Specify the desired entities
     with open('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/data/targetEntities.txt', 'r') as f:
         entity_list = [line.strip() for line in f]
+        print(entity_list)
         
-    extract_embeddings_for_specific_entities(
-        entity_list,
-        f'{inpath}entity2id.txt',
-        ent_embeddings,
-        '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/specific_entity_embeddings.txt'
-    )
-
-    # Get entity embeddings
-    ent_embeddings = transe.ent_embeddings.weight.cpu().data.numpy()
-    rel_embeddings = transe.rel_embeddings.weight.cpu().data.numpy()
-
-    # Save entity embeddings
-    np.savetxt('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/entity_embeddings.txt', ent_embeddings, delimiter='\t')
-    np.savetxt('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/relation_embeddings.txt', rel_embeddings, delimiter='\t')
-
+    extract_embeddings_for_specific_entities(entity_list,f'{inpath}entity2id.txt',ent_embeddings)
 
 if __name__ == '__main__':
     
