@@ -1,5 +1,6 @@
 from operator import itemgetter
 import json
+
 import rdflib
 from rdflib.namespace import RDF, OWL, RDFS
 from rdflib import URIRef
@@ -43,6 +44,9 @@ def construct_kg(ontologySet,annotationSet,annotationType):
 
                     ents.update((ent.strip() for ent in annotations.split(",")))
 
+                    if headEnt not in ents:
+                        ents.append(headEnt)
+
                     for urlAnnot in annotations.split(","):
                         kg.add((URIRef(headEnt), URIRef(f"http://purl.obolibrary.org/obo/{annotationType[loc]}"),
                                 URIRef(urlAnnot.strip())))
@@ -66,6 +70,8 @@ def construct_kg(ontologySet,annotationSet,annotationType):
                         headEnt = f"http://purl.obolibrary.org/obo/{headInfo.split(',')[0]}"
 
                         ents.update((ent.strip() for ent in annotations.split(",")))
+                        if headEnt not in ents:
+                            ents.append(headEnt)
 
                         for urlAnnot in annotations.split(","):
                             kg.add((URIRef(headEnt), URIRef(f"http://purl.obolibrary.org/obo/{annotationType[trueLoc]}"),
@@ -79,8 +85,9 @@ def construct_kg(ontologySet,annotationSet,annotationType):
 
     #kg.serialize(destination="/home/ricciard0.dc/mimicReadmission/mimicreadmission/data/myKG.xml")
 
-    with open('targetEntities.json', 'w') as file:
-        json.dump(ents, file)
-        
+    with open('/home/ricciard0.dc/RDF2Vec_Structure/targetEntities.txt', 'w') as file:
+        for ent in ents:
+            file.write(f'{ent}\n')
+
     print("KG created")
-    return kg
+    return kg,ents

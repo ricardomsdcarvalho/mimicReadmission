@@ -10,6 +10,25 @@ from openke.data import TrainDataLoader
 import numpy as np
 import os
 
+def extract_embeddings_for_specific_entities(entity_list, entity2id_path, ent_embeddings, 
+                                             output_path = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/'):
+    # Load entity2id mapping
+    entity2id = {}
+    with open(entity2id_path, 'r') as f:
+        for line in f:
+            entity, eid = line.strip().split('\t')
+            entity2id[entity] = int(eid)
+
+    # Get the indices of the desired entities
+    desired_indices = [entity2id[entity] for entity in entity_list if entity in entity2id]
+
+    # Extract the embeddings for the desired indices
+    specific_embeddings = ent_embeddings[desired_indices]
+
+    # Save the extracted embeddings
+    np.savetxt(output_path, specific_embeddings, delimiter='\t')
+    print(f"Saved embeddings for {len(desired_indices)} entities to {output_path}")
+
 
 def main(inpath = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/data/entityRelation/'):
     
@@ -72,6 +91,20 @@ def main(inpath = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission
 
     # Get entity embeddings
     ent_embeddings = transe.ent_embeddings.weight.cpu().data.numpy()
+
+    # Specify the desired entities
+    with open('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/data/targetEntities.txt', 'r') as f:
+        entity_list = [line.strip() for line in f]
+        
+    extract_embeddings_for_specific_entities(
+        entity_list,
+        f'{inpath}entity2id.txt',
+        ent_embeddings,
+        '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/emb-transE/output/specific_entity_embeddings.txt'
+    )
+
+    # Get entity embeddings
+    ent_embeddings = transe.ent_embeddings.weight.cpu().data.numpy()
     rel_embeddings = transe.rel_embeddings.weight.cpu().data.numpy()
 
     # Save entity embeddings
@@ -81,4 +114,7 @@ def main(inpath = '/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission
 
 if __name__ == '__main__':
     
-    main()
+    #main()
+    with open('/Users/ricardocarvalho/Documents/WorkStation/mimicReadmission/mimicreadmission/data/targetEntities.txt', 'r') as f:
+        entity_list = [line.strip() for line in f]
+        print(entity_list)
